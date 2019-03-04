@@ -9,17 +9,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+
+
 @Entity
+// JPA annotation to make object ready for storage ina JPA-based data store
 public class User implements Serializable {
-	
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue
+
+
+	@Id  // instance variable annotated by @Id will be marked as entity identifier/ primary key in DB
+	@GeneratedValue  // specifies which strategy is used for identifier generation for an instance variable marked by @Id
 	private Long id;
-	
-	@Column(nullable = false) 
+
+	// @Column JPA annotation to specify the mapped column for a persistent property/field. -> marks annotated
+	// instance variable as persistent.
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(nullable = false, unique = true) 
@@ -30,6 +36,8 @@ public class User implements Serializable {
 
 	@Column(nullable = false)
 	private UserStatus status;
+
+
 
 	public Long getId() {
 		return id;
@@ -61,6 +69,7 @@ public class User implements Serializable {
 
 	public void setToken(String token) {
 		this.token = token;
+		// pw?
 	}
 
 	public UserStatus getStatus() {
@@ -71,7 +80,10 @@ public class User implements Serializable {
 		this.status = status;
 	}
 
-	@Override
+
+
+	@Override  // marks a method explicitly as "overriding", in this case for 'equals'.
+	// Here used to check if two User objects are identical via the comparison of their user Id.
 	public boolean equals(Object o) {
 		if (o == this) return true;
 		if (!(o instanceof User)) {

@@ -27,6 +27,7 @@ public class UserService {
 
     public Iterable<User> getUsers() {
         return this.userRepository.findAll();
+        // returns all users in this UserRepository
     }
 
     public User createUser(User newUser) {
@@ -36,4 +37,9 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+
+
+
+
+
 }
