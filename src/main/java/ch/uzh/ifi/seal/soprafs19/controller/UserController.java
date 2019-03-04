@@ -38,8 +38,13 @@ public class UserController {
     }
 
 
+    @PutMapping("/users/{id}")
+    User updateUser(@RequestBody User thisUser) {
+        //User updateUser(@PathVariable User thisUser) {
+        return this.service.updateUser(thisUser);
+    }
 
-    
+
 
 
 

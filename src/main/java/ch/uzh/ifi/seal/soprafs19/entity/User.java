@@ -25,7 +25,8 @@ public class User implements Serializable {
 
 	// @Column JPA annotation to specify the mapped column for a persistent property/field. -> marks annotated
 	// instance variable as persistent.
-	@Column(nullable = false)
+
+	@Column(nullable = false)  // likely not needed, replace with password
 	private String name;
 	
 	@Column(nullable = false, unique = true) 
@@ -37,48 +38,69 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private UserStatus status;
 
+	@Column  // might need to actually be nullable
+	private String birthdayDate;
+
+/*	@Column(nullable = false)
+	private String creationDate;   */
+
 
 
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
+
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+
 	public String getToken() {
 		return token;
 	}
-
 	public void setToken(String token) {
 		this.token = token;
 		// pw?
 	}
 
+
 	public UserStatus getStatus() {
 		return status;
 	}
-
 	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
+
+
+	public String getBirthdayDate() {
+		return birthdayDate;
+	}
+	public void setBirthdayDate(String birthdayDate) {
+		this.birthdayDate = birthdayDate;
+	}
+
+
+/*	public String getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
+	}   */
 
 
 
