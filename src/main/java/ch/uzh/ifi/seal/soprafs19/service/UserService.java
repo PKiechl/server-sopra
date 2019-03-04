@@ -44,26 +44,15 @@ public class UserService {
     }
     // gets a single User, identified via his User ID
 
-    public User updateUser(User thisUser) {
-        Long id = thisUser.getId(); // consistent across both the updated and "old" user data
+    public User updateUser (User thisUser) {
+        Long id = thisUser.getId(); // consistent accross "old" and updated User
         User updatedUser = this.userRepository.findUserById(id);
-        // 'this' needed?
 
-        if (!thisUser.getUsername().equals(updatedUser.getUsername())) {
-            updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
-            // if the old entry is different, then it is overwritten
-        }
-        if (!thisUser.getBirthdayDate().equals(updatedUser.getBirthdayDate())) {
-            updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
-            // if the old entry is different, then it is overwritten
-        }
-
-        userRepository.save(updatedUser); // this might be bad
+        updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
+        updatedUser.setUsername(thisUser.getUsername());
+        // overwrites current with new Username and BirthdayDate
+        userRepository.save(updatedUser);
         return updatedUser;
-        // returns the updated User with the new data. I don't want to simply PUT 'thisUser',
-        // since there might be other entries modified besides username & birthday.
     }
-
-
 
 }
