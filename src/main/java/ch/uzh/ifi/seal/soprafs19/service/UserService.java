@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 @Transactional
@@ -33,7 +35,13 @@ public class UserService {
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.ONLINE);
-        // TODO: will need to include creation date
+
+        String pattern = "EEEEE dd.MM.yyyyy HH:mm:ss Z";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(new Date());
+        newUser.setCreationDate(date);
+        // gets Creation Date (in a rather cumbersome fashion, but hey - it works)
+
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;

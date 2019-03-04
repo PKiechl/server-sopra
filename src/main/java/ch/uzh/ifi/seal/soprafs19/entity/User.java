@@ -41,8 +41,8 @@ public class User implements Serializable {
 	@Column  // might need to actually be nullable
 	private String birthdayDate;
 
-/*	@Column(nullable = false)
-	private String creationDate;   */
+	@Column(nullable = false)
+	private String creationDate;
 
 
 
@@ -95,12 +95,12 @@ public class User implements Serializable {
 	}
 
 
-/*	public String getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
-	}   */
+	}
 
 
 
