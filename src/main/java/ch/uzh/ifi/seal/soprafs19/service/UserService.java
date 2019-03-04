@@ -38,7 +38,10 @@ public class UserService {
         return newUser;
     }
 
-
+    public User getUserById(Long id) {
+        return this.userRepository.findUserById(id);
+    }
+    // gets a single User, identified via his User ID
 
 
 

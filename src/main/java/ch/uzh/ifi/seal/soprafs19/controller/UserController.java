@@ -3,11 +3,7 @@ package ch.uzh.ifi.seal.soprafs19.controller;
 import ch.uzh.ifi.seal.soprafs19.entity.User;
 import ch.uzh.ifi.seal.soprafs19.repository.UserRepository;
 import ch.uzh.ifi.seal.soprafs19.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -20,13 +16,11 @@ public class UserController {
     }
 
 
-
     @GetMapping("/users")
     Iterable<User> all() {
         return service.getUsers();
     }
     // returns all Users via .findAll()
-
 
 
     @PostMapping("/users")
@@ -35,6 +29,17 @@ public class UserController {
         return this.service.createUser(newUser);
     }
     // creates new User
+
+
+    @GetMapping("/users/{id}")
+    User getUserById(@PathVariable Long id) {
+        // keep an eye on this @PathVariable
+        return this.service.getUserById(id);
+    }
+
+
+
+    
 
 
 
@@ -47,7 +52,7 @@ public class UserController {
     // POST User - predone (me thinks) - BUT, 409 not done yet and currently available to non-Users
 
     // S2
-    // GET User - find a user via his ID, idplay user profile (if found)
+    // GET User - find a user via his ID, display user profile (if found)
     // GET User - response if user with ID was not found
 
     // S3
