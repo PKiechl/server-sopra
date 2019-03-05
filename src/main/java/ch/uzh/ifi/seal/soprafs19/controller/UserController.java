@@ -3,6 +3,8 @@ package ch.uzh.ifi.seal.soprafs19.controller;
 import ch.uzh.ifi.seal.soprafs19.entity.User;
 import ch.uzh.ifi.seal.soprafs19.repository.UserRepository;
 import ch.uzh.ifi.seal.soprafs19.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,49 +22,55 @@ public class UserController {
     Iterable<User> all() {
         return service.getUsers();
     }
-    // returns all Users via .findAll()
+    // returns all Users via .findAll(). fine as is, not REST specification given.
 
 
     @PostMapping("/users")
-    User createUser(@RequestBody User newUser) {
+    public ResponseEntity<String> createUser(@RequestBody User newUser) {
         // @RequestBody binds incoming JSON to the object it annotates
-        return this.service.createUser(newUser);
+        try {
+            this.service.createUser(newUser);
+            String url = "placeholder/" + newUser.getId();
+            // TODO: update to real URL. might actually be of type Location, not sure
+
+            return new ResponseEntity<>(url, HttpStatus.CREATED);
+            // CREATED is status code 201
+        }
+       catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            // CONFLICT is status code 409
+            // TODO: currently just returns status code 409 - needs to return the error itself too (?)
+        }
     }
-    // creates new User
 
 
     @GetMapping("/users/{id}")
-    User getUserById(@PathVariable Long id) {
-        // keep an eye on this @PathVariable
-        return this.service.getUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = this.service.getUserById(id);
+
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+            // OK is status cod 200
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // NOT_FOUND is status code 404
     }
 
 
     @PutMapping("/users/{id}")
-    User updateUser(@RequestBody User thisUser) {
-        //User updateUser(@PathVariable User thisUser) {
-        return this.service.updateUser(thisUser);
+    public ResponseEntity<String> updateUser(@RequestBody User thisUser) {
+        try {
+            this.service.updateUser(thisUser);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            // NO_CONTENT is status code 204
+            // TODO: currently able to alter user details from any /{id} for any user with a valid id.
+            // not sure how to solve this yet
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("some error", HttpStatus.NOT_FOUND);
+            // NOT_FOUND is status code 404
+        }
     }
-
-
-
-
-
-    // TODO
-    // looks like all the functionality used here is supposed to be Provided by the UserService class, which in turn
-    // uses the helpers of the User class and UserRepository class
-
-
-    // S1
-    // POST User - predone (me thinks) - BUT, 409 not done yet and currently available to non-Users
-
-    // S2
-    // GET User - find a user via his ID, display user profile (if found)
-    // GET User - response if user with ID was not found
-
-    // S3
-    // PUT User - update user profile entries
-    // PUT User - response if no user with given ID is found
 
 
 }
