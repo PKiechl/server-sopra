@@ -26,14 +26,14 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public ResponseEntity<String> createUser(@RequestBody User newUser) {
+    public ResponseEntity<User> createUser(@RequestBody User newUser) {
         // @RequestBody binds incoming JSON to the object it annotates
         try {
             this.service.createUser(newUser);
             String url = "placeholder/" + newUser.getId();
             // TODO: update to real URL. might actually be of type Location, not sure
 
-            return new ResponseEntity<>(url, HttpStatus.CREATED);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
             // CREATED is status code 201
         }
        catch (Exception e) {

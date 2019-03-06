@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 // for storage, retrieval, ...
 public interface UserRepository extends CrudRepository<User, Long> {
 												// stores User with ID tpye Long
-	User findByName(String name);
+	//User findByName(String name);
 	User findByUsername(String username);
 	User findByToken(String token);
 	User findUserById(Long id);

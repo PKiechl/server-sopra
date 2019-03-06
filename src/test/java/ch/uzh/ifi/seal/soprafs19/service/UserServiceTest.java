@@ -37,7 +37,7 @@ public class UserServiceTest {
         Assert.assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
-        testUser.setName("testName");
+        // TODO: this was set:   testUser.setName("testName");
         testUser.setUsername("testUsername");
 
         User createdUser = userService.createUser(testUser);

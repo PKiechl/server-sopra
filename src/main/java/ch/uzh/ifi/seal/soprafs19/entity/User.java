@@ -27,13 +27,11 @@ public class User implements Serializable {
 	// instance variable as persistent.
 
 	@Column(nullable = false)
-	private String name;
+	private String password;
 	
 	@Column(nullable = false, unique = true) 
 	private String username;
 
-	@Column(nullable = false)
-	private String password;
 	
 	@Column(nullable = false, unique = true) 
 	private String token;
@@ -47,6 +45,12 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private String creationDate;
 
+	@Column
+	private String games;
+
+	@Column
+	private String moves;
+
 
 
 	public Long getId() {
@@ -57,20 +61,13 @@ public class User implements Serializable {
 	}
 
 
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
 	public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 
 	public String getPassword() {
 		return password;
@@ -110,6 +107,19 @@ public class User implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	public String getGames() {
+		return games;
+	}
+	public void setGames(String games) {
+		this.games = games;
+	}
+
+	public String getMoves() {
+		return moves;
+	}
+	public void setMoves(String moves) {
+		this.moves = moves;
+	}
 
 
 	@Override  // marks a method explicitly as "overriding", in this case for 'equals'.
