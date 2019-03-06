@@ -26,11 +26,14 @@ public class User implements Serializable {
 	// @Column JPA annotation to specify the mapped column for a persistent property/field. -> marks annotated
 	// instance variable as persistent.
 
-	@Column(nullable = false)  // likely not needed, replace with password
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(nullable = false, unique = true) 
 	private String username;
+
+	@Column(nullable = false)
+	private String password;
 	
 	@Column(nullable = false, unique = true) 
 	private String token;
@@ -69,6 +72,12 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getToken() {
 		return token;
