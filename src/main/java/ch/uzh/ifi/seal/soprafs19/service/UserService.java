@@ -63,4 +63,13 @@ public class UserService {
         return updatedUser;
     }
 
+    public User loginUser (User user) {
+        User validatedUser = this.userRepository.findByUsername(user.getUsername());
+        // search by username, since id is not delivered (only pw and uname)
+        if (user.getUsername().equals(validatedUser.getUsername()) && user.getPassword().equals(validatedUser.getPassword())) {
+            return validatedUser;
+        }
+        return null;
+    }
+
 }
