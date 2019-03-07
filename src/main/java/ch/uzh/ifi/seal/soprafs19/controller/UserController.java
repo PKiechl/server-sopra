@@ -47,7 +47,12 @@ public class UserController {
     public ResponseEntity<User> loginUser(@RequestBody User user) {
         try {
             User validatedUser = this.service.loginUser(user);
-            return new ResponseEntity<>(validatedUser, HttpStatus.OK);
+            if (validatedUser != null) {
+                return new ResponseEntity<>(validatedUser, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+            }
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
