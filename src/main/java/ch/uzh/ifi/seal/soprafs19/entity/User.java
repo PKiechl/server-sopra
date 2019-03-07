@@ -46,10 +46,10 @@ public class User implements Serializable {
 	private String creationDate;
 
 	@Column
-	private String games;
+	private Integer games;
 
 	@Column
-	private String moves;
+	private Integer moves;
 
 
 
@@ -107,17 +107,17 @@ public class User implements Serializable {
 		this.creationDate = creationDate;
 	}
 
-	public String getGames() {
+	public Integer getGames() {
 		return games;
 	}
-	public void setGames(String games) {
+	public void setGames(Integer games) {
 		this.games = games;
 	}
 
-	public String getMoves() {
+	public Integer getMoves() {
 		return moves;
 	}
-	public void setMoves(String moves) {
+	public void setMoves(Integer moves) {
 		this.moves = moves;
 	}
 
