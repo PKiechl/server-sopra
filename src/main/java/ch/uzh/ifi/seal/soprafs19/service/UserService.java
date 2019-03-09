@@ -36,7 +36,7 @@ public class UserService {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.ONLINE);
 
-        String pattern = "dd.MM.yyyyy";
+        String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         newUser.setCreationDate(date);
