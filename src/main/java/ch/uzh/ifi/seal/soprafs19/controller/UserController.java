@@ -36,12 +36,13 @@ public class UserController {
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
             // CREATED is status code 201
         }
-       catch (Exception e) {
+        catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
             // CONFLICT is status code 409
             // TODO: currently just returns status code 409 - needs to return the error itself too (?)
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestBody User user) {
