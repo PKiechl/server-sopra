@@ -49,13 +49,16 @@ public class UserController {
         try {
             User validatedUser = this.service.loginUser(user);
             if (validatedUser != null) {
+                //valid credentials
                 return new ResponseEntity<>(validatedUser, HttpStatus.OK);
             }
             else {
+                // wrong credentials
                 return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
             }
         }
         catch (Exception e) {
+            // something went terribly wrong
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
     }
@@ -75,6 +78,8 @@ public class UserController {
 
 
     @PutMapping("/users/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
+        // fixes CORS issues with PUT http request
     public ResponseEntity<String> updateUser(@RequestBody User thisUser) {
         try {
             this.service.updateUser(thisUser);
