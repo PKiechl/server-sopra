@@ -56,10 +56,20 @@ public class UserService {
         Long id = thisUser.getId(); // consistent accross "old" and updated User
         User updatedUser = this.userRepository.findUserById(id);
 
-        updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
-        updatedUser.setUsername(thisUser.getUsername());
-        // overwrites current with new Username and BirthdayDate
+        if (thisUser.getBirthdayDate().equals(updatedUser.getBirthdayDate()) ) {
+            // Birthday has not been updated, thus only username needs setting
+            updatedUser.setUsername(thisUser.getUsername());
+        }
+        else {
+            // covers both the case where both username and birthday have been altered
+            // and where only the birthday has been altered, since the username is non-nullable
+            // and thus is always to be provided by the client-side.
+            updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
+            updatedUser.setUsername(thisUser.getUsername());
+            // overwrites current with new Username and BirthdayDate
+        }
         userRepository.save(updatedUser);
+        // stores changes to DB
         return updatedUser;
     }
 

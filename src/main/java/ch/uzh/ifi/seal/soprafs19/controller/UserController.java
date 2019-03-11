@@ -79,17 +79,16 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
-        // fixes CORS issues with PUT http request
+        // fixes CORS issues with PUT http request, we'll see if this also works for Heroku
+        // or if another origins is needed
     public ResponseEntity<String> updateUser(@RequestBody User thisUser) {
         try {
             this.service.updateUser(thisUser);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             // NO_CONTENT is status code 204
-            // TODO: currently able to alter user details from any /{id} for any user with a valid id.
-            // not sure how to solve this yet
         }
         catch (Exception e) {
-            return new ResponseEntity<>("some error", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("A fatal error occurred.", HttpStatus.NOT_FOUND);
             // NOT_FOUND is status code 404
         }
     }
