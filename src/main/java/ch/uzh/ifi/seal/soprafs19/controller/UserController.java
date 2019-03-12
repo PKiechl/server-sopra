@@ -94,4 +94,20 @@ public class UserController {
     }
 
 
+    @PutMapping("/logout")
+    @CrossOrigin(origins = "http://localhost:3000")
+    // fixes CORS issues with PUT http request, we'll see if this also works for Heroku
+    // or if another origins is needed
+    public ResponseEntity<String> logoutUser(@RequestBody String thisUserToken) {
+        try {
+            this.service.logoutUser(thisUserToken);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            // NO_CONTENT is status code 204
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("An error occurred whilst logging out.", HttpStatus.NOT_FOUND);
+            // NOT_FOUND is status code 404
+        }
+    }
+
 }

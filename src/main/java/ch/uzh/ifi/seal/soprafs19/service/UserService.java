@@ -34,7 +34,8 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setStatus(UserStatus.ONLINE);
+        newUser.setStatus(UserStatus.OFFLINE);
+        // called in registration, now set to OFFLINE
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -77,9 +78,18 @@ public class UserService {
         User validatedUser = this.userRepository.findByUsername(user.getUsername());
         // search by username, since id is not delivered (only pw and uname)
         if (user.getUsername().equals(validatedUser.getUsername()) && user.getPassword().equals(validatedUser.getPassword())) {
+            validatedUser.setStatus(UserStatus.ONLINE);
+            // logging in sets user status to ONLINE
             return validatedUser;
         }
         return null;
     }
+
+    public void logoutUser (String token) {
+        User loggedoutUser = this.userRepository.findByToken(token);
+        loggedoutUser.setStatus(UserStatus.OFFLINE);
+        // sets the state to OFFLINE upon logout
+    }
+
 
 }
