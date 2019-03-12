@@ -52,26 +52,20 @@ public class UserService {
         return this.userRepository.findUserById(id);
     }
     // gets a single User, identified via his User ID
+    
 
-    public User updateUser (User thisUser) {
-        Long id = thisUser.getId(); // consistent accross "old" and updated User
+    public void updateUser (User thisUser) {
+        Long id = thisUser.getId(); // immutable, since primary key. thus valid identification method
         User updatedUser = this.userRepository.findUserById(id);
 
-        if (thisUser.getBirthdayDate().equals(updatedUser.getBirthdayDate()) ) {
-            // Birthday has not been updated, thus only username needs setting
-            updatedUser.setUsername(thisUser.getUsername());
-        }
-        else {
-            // covers both the case where both username and birthday have been altered
-            // and where only the birthday has been altered, since the username is non-nullable
-            // and thus is always to be provided by the client-side.
+        if (thisUser.getBirthdayDate() != null) {
+            // thus a birthday was provided, hence an update
             updatedUser.setBirthdayDate(thisUser.getBirthdayDate());
-            updatedUser.setUsername(thisUser.getUsername());
-            // overwrites current with new Username and BirthdayDate
         }
+        updatedUser.setUsername(thisUser.getUsername());
+        // since the username needs to provided in either case, it is either new
+        // and thus gets updated or it is the same, thus just overwritten with the same
         userRepository.save(updatedUser);
-        // stores changes to DB
-        return updatedUser;
     }
 
     public User loginUser (User user) {
