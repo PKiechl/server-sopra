@@ -85,5 +85,13 @@ public class UserService {
         // sets the state to OFFLINE upon logout
     }
 
+    public Boolean allowAccess (String token) {
+        // determines whether a valid token has been submitted. if yes, access is granted.
+        if (this.userRepository.findByToken(token) == null) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

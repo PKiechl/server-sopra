@@ -17,12 +17,25 @@ public class UserController {
         this.service = service;
     }
 
-
+    /*
     @GetMapping("/users")
     Iterable<User> all() {
         return service.getUsers();
     }
     // returns all Users via .findAll(). fine as is, not REST specification given.
+    */
+
+
+    @GetMapping("/users")
+    public ResponseEntity<Iterable<User>> all(@RequestHeader(value="Token") String token) {
+        if (this.service.allowAccess(token)) {
+            return new ResponseEntity<>(service.getUsers(), HttpStatus.OK);
+            // return all users plus status code 200
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        // return only status code 403
+    }
+    
 
 
     @PostMapping("/users")
@@ -64,20 +77,26 @@ public class UserController {
 
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@RequestHeader(value="Token") String token, @PathVariable Long id) {
         User user = this.service.getUserById(id);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-            // OK is status code 200
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        // here in the REST spec sheet it says is should return a string with the error.
-        // however, since i need to return a Type User on successful request, i don't see
-        // how i can return a String on an unsuccessful request. I will thus simply craft
-        // an appropriate alert matching the returned http status on the client-side.
+        if(token.equals(user.getToken()) ) {
+            // the header includes the token to ensure that the access is done by a registered user
+            if (user != null) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+                // OK is status code 200
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            // here in the REST spec sheet it says is should return a string with the error.
+            // however, since i need to return a Type User on successful request, i don't see
+            // how i can return a String on an unsuccessful request. I will thus simply craft
+            // an appropriate alert matching the returned http status on the client-side.
 
-        // NOT_FOUND is status code 404
+            // NOT_FOUND is status code 404
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        // access denied, FORBIDDEN is status code 403
+
     }
 
 
@@ -85,16 +104,30 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
         // fixes CORS issues with PUT http request, we'll see if this also works for Heroku
         // or if another origins is needed
-    public ResponseEntity<String> updateUser(@RequestBody User thisUser) {
-        try {
-            this.service.updateUser(thisUser);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            // NO_CONTENT is status code 204
+    public ResponseEntity<String> updateUser(@RequestHeader(value="Token") String token, @RequestBody User thisUser, @PathVariable Long id) {
+        System.out.println("reached PUT");
+
+        User user = this.service.getUserById(id);
+        System.out.println("Got user with id: " + id +" and the user is called: "+ user.getUsername());
+        // needed to ensure only the authorized user himself can update his fields
+        System.out.println("Token from DB: " +user.getToken());
+        System.out.println("Token delivered by header: " + token);
+        if(token.equals(user.getToken()) ) {
+            System.out.println("reached IF in controller");
+            try {
+                this.service.updateUser(thisUser);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                // NO_CONTENT is status code 204
+            }
+            catch (Exception e) {
+                System.out.println("in exception. PUT, users/id.");
+                return new ResponseEntity<>("No user with that id was found. user data not updated.", HttpStatus.NOT_FOUND);
+                // NOT_FOUND is status code 404
+            }
         }
-        catch (Exception e) {
-            return new ResponseEntity<>("No user with that id was found. user data not updated.", HttpStatus.NOT_FOUND);
-            // NOT_FOUND is status code 404
-        }
+        System.out.println("skipped IF in controller.");
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        // access denied, FORBIDDEN is status code 403
     }
 
 
