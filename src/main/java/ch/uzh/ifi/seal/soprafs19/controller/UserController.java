@@ -26,20 +26,19 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User newUser) {
+    public ResponseEntity<String> createUser(@RequestBody User newUser) {
         // @RequestBody binds incoming JSON to the object it annotates
         try {
             this.service.createUser(newUser);
-            String url = "placeholder/" + newUser.getId();
-            // TODO: update to real URL. might actually be of type Location, not sure
+            String url = "users/" + newUser.getId();
 
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+            return new ResponseEntity<>(url, HttpStatus.CREATED);
             // CREATED is status code 201
         }
         catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            String err = "username already taken!";
+            return new ResponseEntity<>(err, HttpStatus.CONFLICT);
             // CONFLICT is status code 409
-            // TODO: currently just returns status code 409 - needs to return the error itself too (?)
         }
     }
 
@@ -70,9 +69,14 @@ public class UserController {
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
-            // OK is status cod 200
+            // OK is status code 200
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // here in the REST spec sheet it says is should return a string with the error.
+        // however, since i need to return a Type User on successful request, i don't see
+        // how i can return a String on an unsuccessful request. I will thus simply craft
+        // an appropriate alert matching the returned http status on the client-side.
+
         // NOT_FOUND is status code 404
     }
 
@@ -88,7 +92,7 @@ public class UserController {
             // NO_CONTENT is status code 204
         }
         catch (Exception e) {
-            return new ResponseEntity<>("A fatal error occurred.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No user with that id was found. user data not updated.", HttpStatus.NOT_FOUND);
             // NOT_FOUND is status code 404
         }
     }
@@ -101,7 +105,7 @@ public class UserController {
     public ResponseEntity<String> logoutUser(@RequestBody String thisUserToken) {
         try {
             this.service.logoutUser(thisUserToken);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("successful logout", HttpStatus.NO_CONTENT);
             // NO_CONTENT is status code 204
         }
         catch (Exception e) {

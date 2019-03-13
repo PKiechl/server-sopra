@@ -52,7 +52,7 @@ public class UserService {
         return this.userRepository.findUserById(id);
     }
     // gets a single User, identified via his User ID
-    
+
 
     public void updateUser (User thisUser) {
         Long id = thisUser.getId(); // immutable, since primary key. thus valid identification method
