@@ -58,12 +58,10 @@ public class UserService {
     }
     // gets a single User, identified via his User ID
 
-
     public User getUserByToken(String token) {
         return userRepository.findByToken(token);
         // gets user by token
     }
-
 
     public void updateUser (User thisUser) {
         Long id = thisUser.getId(); // immutable, since primary key. thus valid identification method
