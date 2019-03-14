@@ -28,6 +28,8 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<Iterable<User>> all(@RequestHeader(value="Token") String token) {
+        // for future reference: https://viralpatel.net/blogs/spring-requestheader-example/
+
         if (this.service.allowAccess(token)) {
             return new ResponseEntity<>(service.getUsers(), HttpStatus.OK);
             // return all users plus status code 200
@@ -35,7 +37,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         // return only status code 403
     }
-    
+
 
 
     @PostMapping("/users")
@@ -145,6 +147,22 @@ public class UserController {
             return new ResponseEntity<>("An error occurred whilst logging out.", HttpStatus.NOT_FOUND);
             // NOT_FOUND is status code 404
         }
+    }
+
+
+    @GetMapping("/token")
+    public ResponseEntity<Void> validToken(@RequestHeader(value="Token") String token) {
+        System.out.println(token);
+        if (token == null) {
+            System.out.println("ok, no token in client");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        if (service.getUserByToken(token) != null) {
+            System.out.println("ok");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        System.out.println("fail");
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
 }

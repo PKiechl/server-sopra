@@ -32,6 +32,11 @@ public class UserService {
         // returns all users in this UserRepository
     }
 
+    public void nukeUsers() {
+        // for the purpose of testing, deletes all users
+        userRepository.deleteAll();
+    }
+
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
@@ -49,9 +54,15 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return this.userRepository.findUserById(id);
+        return userRepository.findUserById(id);
     }
     // gets a single User, identified via his User ID
+
+
+    public User getUserByToken(String token) {
+        return userRepository.findByToken(token);
+        // gets user by token
+    }
 
 
     public void updateUser (User thisUser) {
@@ -83,6 +94,8 @@ public class UserService {
         User loggedoutUser = this.userRepository.findByToken(token);
         loggedoutUser.setStatus(UserStatus.OFFLINE);
         // sets the state to OFFLINE upon logout
+        this.userRepository.save(loggedoutUser);
+        // ensures change is saved in data base
     }
 
     public Boolean allowAccess (String token) {
