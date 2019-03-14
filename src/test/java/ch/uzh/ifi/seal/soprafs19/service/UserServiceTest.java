@@ -295,4 +295,5 @@ public class UserServiceTest {
         Assert.assertEquals(true, granted);
         // assert that it returns true if the token is valid
     }
+    
 }
